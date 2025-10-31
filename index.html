@@ -1,159 +1,185 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <base target="_top">
-    <style>
-      body {
-        font-family: 'Century Gothic', Arial, sans-serif;
-        margin: 0;
-        padding: 40px;
-        background-color: #ffffff;
-        color: #254467;
-      }
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selector de Categorías</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      background: linear-gradient(145deg, #f4f6f9, #ffffff);
+      color: #1a2b4c;
+    }
 
-      h2 {
-        text-align: center;
-        color: #C42021;
-        margin-bottom: 40px;
-        font-weight: 600;
-        font-size: 1.8em;
-      }
+    h2 {
+      text-align: center;
+      color: #D62828;
+      font-size: 2.2em;
+      margin-bottom: 40px;
+      font-weight: 700;
+    }
 
+    .main-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      max-width: 1100px;
+      margin: 0 auto;
+      gap: 40px;
+    }
+
+    .data-display {
+      flex: 2;
+      border-left: 6px solid #E65A28;
+      padding-left: 30px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .data-display p {
+      font-size: 1.5em;
+      margin: 20px 0;
+    }
+
+    .data-display strong {
+      color: #E65A28;
+    }
+
+    .selector-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      background-color: #fefefe;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 1em;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    select {
+      padding: 12px 14px;
+      font-size: 1em;
+      border-radius: 10px;
+      border: 1px solid #d0d0d0;
+      background-color: #ffffff;
+      color: #1a2b4c;
+      font-family: inherit;
+      transition: all 0.2s ease-in-out;
+      width: 100%;
+    }
+
+    select:hover {
+      border-color: #E65A28;
+      box-shadow: 0 0 0 3px rgba(230, 90, 40, 0.15);
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #D62828;
+      box-shadow: 0 0 0 3px rgba(214, 40, 40, 0.2);
+    }
+
+    @media (max-width: 768px) {
       .main-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        max-width: 1000px;
-        margin: 0 auto;
-        gap: 60px;
-      }
-
-      .data-display {
-        flex: 2;
-        border-left: 4px solid #E65A28;
-        padding-left: 30px;
-      }
-
-      .data-display p {
-        font-size: 1.4em;
-        margin-bottom: 20px;
-      }
-
-      .data-display strong {
-        color: #E65A28;
-        font-weight: bold;
-      }
-
-      .selector-container {
-        flex: 1;
-        display: flex;
         flex-direction: column;
-        gap: 25px;
-        background-color: #f6f8fa;
-        padding: 25px 30px;
-        border-radius: 12px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+        gap: 30px;
       }
 
-      label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        font-size: 0.95em;
+      .data-display, .selector-container {
+        width: 100%;
       }
+    }
+  </style>
+</head>
+<body>
+  <h2>Selector de Categorías por Prioridad</h2>
 
-      select {
-        padding: 10px;
-        font-size: 1em;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        background-color: #fff;
-        color: #254467;
-        font-family: inherit;
-      }
-
-      select:focus {
-        outline: none;
-        border-color: #E65A28;
-        box-shadow: 0 0 0 2px rgba(230, 90, 40, 0.2);
-      }
-    </style>
-  </head>
-  <body>
-    <h2>Selector de Categorías por Prioridad</h2>
-
-    <div class="main-container">
-      <div class="data-display">
-        <p><strong>Prefijo:</strong> <span id="prefijo"></span></p>
-        <p><strong>Sufijo:</strong> <span id="sufijo"></span></p>
-      </div>
-
-      <div class="selector-container">
-        <div>
-          <label for="prioridad">Selecciona una prioridad:</label>
-          <select id="prioridad" onchange="actualizarCategorias()"></select>
-        </div>
-
-        <div>
-          <label for="categoria">Selecciona una categoría:</label>
-          <select id="categoria" onchange="mostrarInfo()"></select>
-        </div>
-      </div>
+  <div class="main-container">
+    <div class="data-display">
+      <p><strong>Prefijo:</strong> <span id="prefijo"></span></p>
+      <p><strong>Sufijo:</strong> <span id="sufijo"></span></p>
     </div>
 
-    <script>
-      let data = {};
+    <div class="selector-container">
+      <div>
+        <label for="prioridad">Selecciona una prioridad:</label>
+        <select id="prioridad" onchange="actualizarCategorias()"></select>
+      </div>
 
-      function cargarDatos() {
-        google.script.run.withSuccessHandler(mostrarPrioridades).getPrioridades();
-      }
+      <div>
+        <label for="categoria">Selecciona una categoría:</label>
+        <select id="categoria" onchange="mostrarInfo()"></select>
+      </div>
+    </div>
+  </div>
 
-      function mostrarPrioridades(response) {
-        data = response;
-        const prioridadSelect = document.getElementById("prioridad");
-        prioridadSelect.innerHTML = "";
+  <script>
+    let data = {};
 
-        Object.keys(data).forEach(codigo => {
+    function cargarDatos() {
+      google.script.run.withSuccessHandler(mostrarPrioridades).getPrioridades();
+    }
+
+    function mostrarPrioridades(response) {
+      data = response;
+      const prioridadSelect = document.getElementById("prioridad");
+      prioridadSelect.innerHTML = "";
+
+      Object.keys(data).forEach(codigo => {
+        const option = document.createElement("option");
+        option.value = codigo;
+        option.textContent = codigo;
+        prioridadSelect.appendChild(option);
+      });
+
+      actualizarCategorias();
+    }
+
+    function actualizarCategorias() {
+      const prioridad = document.getElementById("prioridad").value;
+      const categoriaSelect = document.getElementById("categoria");
+      categoriaSelect.innerHTML = "";
+
+      if (data[prioridad]) {
+        data[prioridad].categorias.forEach((cat, index) => {
           const option = document.createElement("option");
-          option.value = codigo;
-          option.textContent = codigo;
-          prioridadSelect.appendChild(option);
+          option.value = index;
+          option.textContent = cat;
+          categoriaSelect.appendChild(option);
         });
 
-        actualizarCategorias();
+        mostrarInfo();
       }
+    }
 
-      function actualizarCategorias() {
-        const prioridad = document.getElementById("prioridad").value;
-        const categoriaSelect = document.getElementById("categoria");
-        categoriaSelect.innerHTML = "";
+    function mostrarInfo() {
+      const prioridad = document.getElementById("prioridad").value;
+      const index = document.getElementById("categoria").value;
 
-        if (data[prioridad]) {
-          data[prioridad].categorias.forEach((cat, index) => {
-            const option = document.createElement("option");
-            option.value = index;
-            option.textContent = cat;
-            categoriaSelect.appendChild(option);
-          });
+      if (data[prioridad]) {
+        const prefijo = data[prioridad].prefijos[index] || "";
+        const builtIn = data[prioridad].builtInCats[index];
+        const sufijo = data[prioridad].sufijosMap[builtIn] || "";
 
-          mostrarInfo();
-        }
+        document.getElementById("prefijo").textContent = prefijo;
+        document.getElementById("sufijo").textContent = sufijo;
       }
+    }
 
-      function mostrarInfo() {
-        const prioridad = document.getElementById("prioridad").value;
-        const index = document.getElementById("categoria").value;
-
-        if (data[prioridad]) {
-          const prefijo = data[prioridad].prefijos[index] || "";
-          const builtIn = data[prioridad].builtInCats[index];
-          const sufijo = data[prioridad].sufijosMap[builtIn] || "";
-
-          document.getElementById("prefijo").textContent = prefijo;
-          document.getElementById("sufijo").textContent = sufijo;
-        }
-      }
-
-      window.onload = cargarDatos;
-    </script>
-  </body>
+    window.onload = cargarDatos;
+  </script>
+</body>
 </html>
