@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
 
+      .selector-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        margin-bottom: 20px;
+      }
+
+      select,
+      p {
+        margin-bottom: 10px;
+      }
+
+      label {
+        font-weight: bold;
+        margin-top: 10px;
+      }
+
+      .info-container {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Selector de Categorías por Prioridad</h2>
+
+    <div class="selector-container">
+      <label for="prioridad">Selecciona una prioridad:</label>
+      <select id="prioridad" onchange="actualizarCategorias()"></select>
+
+      <label for="categoria">Selecciona una categoría:</label>
+      <select id="categoria" onchange="mostrarInfo()"></select>
+    </div>
+
+    <div class="info-container">
+      <p><strong>Prefijo:</strong> <span id="prefijo"></span></p>
+      <p><strong>Sufijo:</strong> <span id="sufijo"></span></p>
+    </div>
+
+    <script>
+      let data = {};
+
+      function cargarDatos() {
+        google.script.run.withSuccessHandler(mostrarPrioridades).getPrioridades();
+      }
+
+      function mostrarPrioridades(response) {
+        data = response;
+        const prioridadSelect = document.getElementById("prioridad");
+        prioridadSelect.innerHTML = "";
+
+        Object.keys(data).forEach(codigo => {
+          const option = document.createElement("option");
+          option.value = codigo;
+          option.textContent = codigo;
+          prioridadSelect.appendChild(option);
+        });
+
+        actualizarCategorias();
+      }
+
+      function actualizarCategorias() {
+        const prioridad = document.getElementById("prioridad").value;
+        const categoriaSelect = document.getElementById("categoria");
+        categoriaSelect.innerHTML = "";
+
+        if (data[prioridad]) {
+          data[prioridad].categorias.forEach((cat, index) => {
+            const option = document.createElement("option");
+            option.value = index;
+            option.textContent = cat;
+            categoriaSelect.appendChild(option);
+          });
+
+          mostrarInfo();
+        }
+      }
+
+      function mostrarInfo() {
+        const prioridad = document.getElementById("prioridad").value;
+        const index = document.getElementById("categoria").value;
+
+        if (data[prioridad]) {
+          const prefijo = data[prioridad].prefijos[index] || "";
+          const builtIn = data[prioridad].builtInCats[index];
+          const sufijo = data[prioridad].sufijosMap[builtIn] || "";
+
+          document.getElementById("prefijo").textContent = prefijo;
+          document.getElementById("sufijo").textContent = sufijo;
+        }
+      }
+
+      window.onload = cargarDatos;
+    </script>
+  </body>
+</html>
